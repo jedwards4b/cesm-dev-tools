@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+use strict;
+use Cwd;
+
+my $case = (split /\//, getcwd())[-1];
+
+my $rundir = `./xmlquery -value RUNDIR`;
+my $model = "cesm";
+
+my $greparg = shift;
+
+$model = shift if($#ARGV>=0);
+
+die "Could not find $rundir\n" unless(-d $rundir);
+
+opendir(D,"$rundir");
+my @logs = grep /$model\.log\.\d+\-\d+\.?/, readdir D;
+#print "$model: @logs\n";
+my $log = $logs[0];
+# find the newest if there are more than one.
+my $lage = -M "$rundir/$log";
+foreach(@logs){    
+    if((-M "$rundir/$_") < $lage){
+	$log=$_;
+	$lage = -M "$rundir/$log";
+    }
+	
+}
+if($log =~ /gz$/){
+    system("zgrep \'$greparg\' $rundir/$log");
+}else{
+    system("grep \'$greparg\' $rundir/$log");
+}

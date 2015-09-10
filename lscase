@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+use strict;
+use Cwd;
+
+my $case = (split /\//, getcwd())[-1];
+
+my $rundir = `./xmlquery -value RUNDIR`;
+
+if(-d "$rundir"){
+    system("ls -ltr $rundir");
+    print "$rundir\n";
+}else{
+    print "Could not find >$rundir<\n";
+}
