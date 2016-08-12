@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 use strict;
 my $version = shift;
-my $alpharoot = "https://svn-ccsm-models.cgd.ucar.edu/cesm1/alphas/branches/";
+my $alpharoot = "https://svn-ccsm-models.cgd.ucar.edu/cesm2/alpha/branches/";
 my $fullurl;
 if($version =~ /^cesm/){
     $fullurl=$alpharoot.$version;
-}elsif($version =~ /(cesm1_.*$)/){
+}elsif($version =~ /(cesm2_.*$)/){
     $fullurl=$version;
     $version = $1;
 }else{
