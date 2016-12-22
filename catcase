@@ -3,7 +3,26 @@ use strict;
 use Cwd;
 
 my $case = (split /\//, getcwd())[-1];
-my $rundir = `./xmlquery -value RUNDIR`;
+
+my $rundir = get_rundir();
+
+sub get_rundir
+{
+    my $lang = `grep python xmlquery`;
+    my $rundir;
+    if ($lang =~ /python/){
+	$rundir = `./xmlquery --value RUNDIR`;
+    }else{
+	$rundir = `./xmlquery -value RUNDIR 2>&1`;
+	if ($rundir =~ /Unknown option/){
+	    $rundir = `./xmlquery -valonly RUNDIR`;
+	    $rundir =~ /= (.*)/;
+	    $rundir = $1;
+	}
+    }
+    return $rundir;
+     
+}
 
 my $model = "cesm";
 $model = shift if($#ARGV>=0);
