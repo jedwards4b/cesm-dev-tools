@@ -21,7 +21,7 @@ sub get_rundir
 	}
     }
     return $rundir;
-     
+
 }
 
 my $model = "cesm";
@@ -30,17 +30,17 @@ $model = shift if($#ARGV>=0);
 die "Could not find $rundir\n" unless(-d $rundir);
 
 opendir(D,"$rundir");
-my @logs = grep /$model\.log\.\d+\-\d+\.?/, readdir D;
-#print "$model: @logs\n";
+my @logs = grep /$model\.log\.[^\s]*\d+\-\d+\.?/, readdir D;
+print "$model: @logs\n";
 my $log = $logs[0];
 # find the newest if there are more than one.
 my $lage = -M "$rundir/$log";
-foreach(@logs){    
+foreach(@logs){
     if((-M "$rundir/$_") < $lage){
 	$log=$_;
 	$lage = -M "$rundir/$log";
     }
-	
+
 }
 
 #print("tail -f $rundir/$log\n");
